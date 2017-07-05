@@ -1,46 +1,51 @@
 from spy_detail import Spy,spy,chat_Message
 from steganography.steganography import Steganography
 from datetime import datetime
-
+from termcolor import colored
 def spy_verification():
     spy.name=raw_input('\n\nENTER YOUR NAME...')
     #name verification
     spy.length= len(spy.name)
     if spy.length==0:
-        exit("\n\nINVALID NAME")
+        exit (colored("\n\nINVALID NAME",'red'))
     else:
-        print "\n\nACCESS GARANTED "
+        print colored("\n\nACCESS GARANTED ",'green')
 #asking for the details
     print "\n\nENTER YOUR DETAILS..."
 #asking for gender
     spy.gender =raw_input("\n\nENTER YOUR GENDER (MALE/FEMALE)...")
     spy.salutaion =raw_input("\n\nSHOULD I CALL YOU MR. OR MISS.")
-    print "\nWELCOME " + spy.salutaion + spy.name
+    print "\nWELCOME %s.%s " %(spy.salutaion,spy.name)
 #asking for age
     spy.age =int(raw_input("\nENTER YOUR AGE"))
     if spy.age>12 and spy.age<50:
-        print "\nVALID AGE"
+        print colored("\nVALID AGE",'green')
     else:
-        exit("\nINVALID AGE")
+        exit(colored("\nINVALID AGE",'red'))
 #asking for rating
     spy.rate = float(raw_input("\n\nENTER YOU RATING(OUT OF 5)"))
-    if spy.rate >= 4.6 and spy.rate <= 5.0:
-        print "\nYOU HAVE NO MATCH"
-    elif spy.rate >= 3.5 and spy.rate <= 4.5:
-        print "\nYOU ARE EXCELLENT"
-    elif spy.rate >= 2.5 and spy.rate < 3.5:
-        print "\nYOU ARE GOOD"
+    if spy.rate<=5:
+        if spy.rate >= 4.6 and spy.rate <= 5.0:
+            print colored("\nYOU HAVE NO MATCH",'green')
+        elif spy.rate >= 3.5 and spy.rate <= 4.5:
+            print colored("\nYOU ARE EXCELLENT",'green')
+        elif spy.rate >= 2.5 and spy.rate < 3.5:
+            print colored("\nYOU ARE GOOD",'green')
+        else:
+            print colored("\nYOU ARE NOT BAD",'green')
     else:
-        print "\nYOU ARE NOT BAD"
+        print colored("INVALID RATING","red")
+        print colored("\n I GUESS YOU ARE TRYING TO BE OVERSMART....BUT IM ONE STEP AHEAD","red")
+        exit()
     print "\n\nYOU WANT TO STAY ONLINE "
     spy_status=int(raw_input("\n1.PRESS 1 FOR YES \n2.PRESS 2 FOR NO"))
     if spy_status==1:
         spy.online=True
-        print "\n\nSUMMARIZING YOUR DETAILS..."
-        print "\n \n YOUR NAME IS %s. YOUR AGE IS %d. YOUR RATING IS %.2f. YOU ARE ONLINE."%(spy.name,spy.age,spy.rate)
+        print colored("\n\nSUMMARIZING YOUR DETAILS...",'green')
+        print colored("\n \n YOUR NAME IS %s. YOUR AGE IS %d. YOUR RATING IS %.2f. YOU ARE ONLINE.","green")%(spy.name,spy.age,spy.rate)
     else:
         spy.online=False
-        exit("\nBYE..... \n HAVE A GOOD DAY")
+        exit(colored("\nBYE..... \n HAVE A GOOD DAY",'red'))
 
 
 
@@ -57,27 +62,27 @@ def add_friend(spy_rate):
     new_friend.rate=float(raw_input("ENTER YOUR RATING"))
     if len(new_friend.name)>0 and new_friend.age>12 and new_friend.age<50 and new_friend.rate>=spy.rate:
         friend.append(new_friend)
-        print "\n%s IS SUCCESSFULLY ADDED TO YOUR FRIEND LIST"%(new_friend.name)
-        print "\nCONGRATS NOW YOU HAVE %d FRIENDS"%(len(friend))
+        print colored("\n%s IS SUCCESSFULLY ADDED TO YOUR FRIEND LIST",'green')%(new_friend.name)
+        print colored("\nCONGRATS NOW YOU HAVE %d FRIENDS","green")%(len(friend))
     else:
-        print "\n\nSORRY DETAILS ARE NOT SUFFICIENT"
+        print colored("\n\nSORRY DETAILS ARE NOT SUFFICIENT","red")
     return len(friend)
 
 #select a friend
 def select_friend():
     if friend==[]:
-        print "\n\nYOU HAVE NO FRIENDS\nPLEASE ADD SOME"
+        print colored("\n\nYOU HAVE NO FRIENDS\nPLEASE ADD SOME","blue")
     else:
         position=1
         print"\n YOUR FRIEND LIST IS...."
         for friends in friend:
-            print "%d. %s aged %d having rating %.2f is online"%(position,friends.name,friends.age,friends.rate)
+            print colored("%d. %s aged %d having rating %.2f is online","blue")%(position,friends.name,friends.age,friends.rate)
             position=position+1
-        c=int(raw_input("SELECT ANY FRIEND"))
+        c=int(raw_input("\nSELECT ANY FRIEND"))
         if c<=position:
             return c-1
         else:
-            print"WRONG INPUT"
+            print colored("WRONG INPUT","red")
 
 #send a message
 def send_a_message():
@@ -89,7 +94,7 @@ def send_a_message():
         Steganography.encode(original_image,output_path,text)
         new_chat=chat_Message(text,datetime.now(),True)
         friend[m_sender].chats.append(new_chat)
-        print "\nYOUR SECRET MESSAGE IMAGE IS READY"
+        print colored("\nYOUR SECRET MESSAGE IMAGE IS READY","green")
 
 
 
@@ -100,20 +105,20 @@ def read_a_message():
         output_path=raw_input("\nPLEASE ENTER NAME OF THE IMAGE...\n")
         hidden_text=Steganography.decode(output_path)
         if len(hidden_text)==0:
-            print "NO MESSAGE FOUND"
+            print colored("NO MESSAGE FOUND","red")
         else:
             splited=hidden_text.split()
             for x in splited:
                 if x=="SOS" or x=="CREATE" or x=="DELETE":
-                    print "SPECIAL CODE WORD IS IDENTIFIED %s"%(x)
+                    print colored("SPECIAL CODE WORD IS IDENTIFIED %s",'green')%(x)
             new_chat=chat_Message(hidden_text,datetime.now(),False)
             friend[m_recieve].chats.append(new_chat)
-            print "YOUR MESSAGE IS SAVED SUCCESSFULLY"
+            print colored("YOUR MESSAGE IS SAVED SUCCESSFULLY",'green')
             if len(splited) > 5:
                 print"YOUR FRIEND %s SPEAKS A LOT" % (friend[m_recieve].name)
                 name=friend[m_recieve].name
                 friend.pop(m_recieve)
-                print "%s IS NOT YOUR FRIEND ANYMORE.."%(name)
+                print colored("%s IS NOT YOUR FRIEND ANYMORE..",'cyan')%(name)
 #read chat
 
 def read_chat():
@@ -132,32 +137,32 @@ def read_chat():
 #addstatus
 def add_status(current_status):
     if current_status==None:
-        print  "\nYOU HAVE NO STATUS YET"
+        print  colored("\nYOU HAVE NO STATUS YET",'blue')
     else:
-        print ("\nYOUR CURRENT STATUS IS %s")%(current_status)
+        print colored("\nYOUR CURRENT STATUS IS %s",'blue')%(current_status)
     status=int(raw_input("\n WHAT YOU WANT TO DO? \n1.PRESS 1 TO ADD A NEW STATUS \n2.PRESS 2 TO UPDATE AN OLD STATUS"))
     if status==1:
         new_status=raw_input("\nENTER YOUR STATUS")
         if len(new_status)==0:
-            print "\nINVALID STATUS"
+            print colored("\nINVALID STATUS",'red')
         else:
             status_list.append(new_status)
-            print "\n\nYOUR STATUS IS SUCCESFULLY UPDATED..."
+            print colored("\n\nYOUR STATUS IS SUCCESFULLY UPDATED...",'green')
             return new_status
     elif status==2:
         if status_list==[]:
-            print "\nYOU HAVE TO FIRST ADD SOME STATUS"
+            print colored("\nYOU HAVE TO FIRST ADD SOME STATUS","yellow")
         else:
             position=1
             for i in status_list:
-                print "%d. %s"%(position,i)
+                print colored("%d. %s",'blue')%(position,i)
                 position=position+1
             status_choice=int(raw_input("\n\nENTER YOU CHOICE"))
             current_status=status_list[status_choice-1]
-            print "\nYOUR STATUS IS SUCCESFULLY UPDATED..."
+            print colored("\nYOUR STATUS IS SUCCESFULLY UPDATED...","green")
             return current_status
     else:
-        print "\nWRONG CHOICE"
+        print colored("\nWRONG CHOICE","red")
 
 #spychoice
 def spy_choice(name,age,rate):
@@ -175,5 +180,7 @@ def spy_choice(name,age,rate):
             read_a_message()
         elif choice==5:
             read_chat()
+        elif choice==6:
+            exit(colored("HAVE A NICE DAY ...BYE","red"))
         else:
-            print "WRONG INPUT"
+           print colored("WRONG INPUT","red")
