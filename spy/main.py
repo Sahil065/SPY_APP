@@ -2,7 +2,7 @@
 
 from spy_detail import spy
 from spy_function import spy_verification,spy_choice
-print 'WELCOME TO THE SPY WORLD'
+print '\033[1;30;49m WELCOME TO THE SPY WORLD'
 print "\n ...VERIFICATION..."
 verify=raw_input("\n \nDO YOU WANT TO CONTINUE AS MR.SAHIL (Y/N)")
 if verify.upper()=="Y":

@@ -99,17 +99,21 @@ def read_a_message():
     if m_recieve != None:
         output_path=raw_input("\nPLEASE ENTER NAME OF THE IMAGE...\n")
         hidden_text=Steganography.decode(output_path)
-        splited=hidden_text.split()
-        for x in splited:
-            if x=="SOS" or x=="CREATE" or x=="DELETE":
-                print "SPECIAL CODE WORD IS IDENTIFIED %s"%(x)
-        new_chat=chat_Message(hidden_text,datetime.now(),False)
-        friend[m_recieve].chats.append(new_chat)
-        print "YOUR MESSAGE IS SAVED SUCCESSFULLY"
-        if len(splited) > 5:
-            print"YOUR FRIEND %s SPEAKS A LOT" % (friend[m_recieve].name)
-            friend.pop(m_recieve)
-
+        if len(hidden_text)==0:
+            print "NO MESSAGE FOUND"
+        else:
+            splited=hidden_text.split()
+            for x in splited:
+                if x=="SOS" or x=="CREATE" or x=="DELETE":
+                    print "SPECIAL CODE WORD IS IDENTIFIED %s"%(x)
+            new_chat=chat_Message(hidden_text,datetime.now(),False)
+            friend[m_recieve].chats.append(new_chat)
+            print "YOUR MESSAGE IS SAVED SUCCESSFULLY"
+            if len(splited) > 5:
+                print"YOUR FRIEND %s SPEAKS A LOT" % (friend[m_recieve].name)
+                name=friend[m_recieve].name
+                friend.pop(m_recieve)
+                print "%s IS NOT YOUR FRIEND ANYMORE.."%(name)
 #read chat
 
 def read_chat():
@@ -130,8 +134,8 @@ def add_status(current_status):
     if current_status==None:
         print  "\nYOU HAVE NO STATUS YET"
     else:
-        print "\nYOUR CURRENT STATUS IS %s"%(current_status)
-    status=int(raw_input("\nWHAT YOU WANT TO DO? \n1.PRESS 1 TO ADD A NEW STATUS \n2.PRESS 2 TO UPDATE AN OLD STATUS"))
+        print ("\nYOUR CURRENT STATUS IS %s")%(current_status)
+    status=int(raw_input("\n WHAT YOU WANT TO DO? \n1.PRESS 1 TO ADD A NEW STATUS \n2.PRESS 2 TO UPDATE AN OLD STATUS"))
     if status==1:
         new_status=raw_input("\nENTER YOUR STATUS")
         if len(new_status)==0:
@@ -141,14 +145,17 @@ def add_status(current_status):
             print "\n\nYOUR STATUS IS SUCCESFULLY UPDATED..."
             return new_status
     elif status==2:
-        position=1
-        for i in status_list:
-            print "%d. %s"%(position,i)
-            position=position+1
-        status_choice=int(raw_input("\n\nENTER YOU CHOICE"))
-        current_status=status_list[status_choice-1]
-        print "\nYOUR STATUS IS SUCCESFULLY UPDATED..."
-        return current_status
+        if status_list==[]:
+            print "\nYOU HAVE TO FIRST ADD SOME STATUS"
+        else:
+            position=1
+            for i in status_list:
+                print "%d. %s"%(position,i)
+                position=position+1
+            status_choice=int(raw_input("\n\nENTER YOU CHOICE"))
+            current_status=status_list[status_choice-1]
+            print "\nYOUR STATUS IS SUCCESFULLY UPDATED..."
+            return current_status
     else:
         print "\nWRONG CHOICE"
 
